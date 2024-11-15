@@ -38,13 +38,19 @@ app.post("/search", (req, res) => {
     console.log(searchRequest);
      client.search(searchRequest).then(response => {
           //restrict results to 5 for now
-          const businesses = response.jsonBody.businesses.slice(0, 5);
+          const businesses = response.jsonBody.businesses;
+          const totalB= response.jsonBody.total;
+          const region = response.jsonBody.region;
+
           const results = {
             status: "SUCCESS",
-            body: businesses
+            businesses: businesses,
+            total: totalB,
+            region: region
           }
           res.send(results);
         }).catch(e => {
+        console.log(e);
           res.send({
               status: "FAIL",
               body: "Yelp API error"
