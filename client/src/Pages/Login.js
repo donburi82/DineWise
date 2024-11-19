@@ -2,19 +2,27 @@ import  React from 'react';
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import './Login.css';
+import {loginSuccess, loginFail} from '../Mock/LoginData'
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loginErr, setLoginErr] = useState('');
+
     const navigate = useNavigate();
     function loginDineWise() {
         if (email !== '' && password !== '') {
             const data = {email: email, password: password};
             //try login
-
+            const response = loginFail(data);
             // if succeed
-            navigate('/home', {state: {jwt: jwt}});
-
+            if (response.status) {
+                navigate('/home', {state: response.token});
+            } else {
+                setLoginErr(response.msg);
+            }
+        } else {
+            setLoginErr('Please fill in your email and password');
         }
     }
 
@@ -34,6 +42,8 @@ function Login() {
       <button onClick={loginDineWise}>
          Login
       </button>
+
+      {loginErr !== "" ? <p className = 'err'>{loginErr}</p> : null}
     </div>
     </>
   );
