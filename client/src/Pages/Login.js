@@ -14,7 +14,7 @@ function Login() {
         if (email !== '' && password !== '') {
             const data = {email: email, password: password};
             //try login
-            const response = loginFail(data);
+            const response = loginSuccess(data);
             // if succeed
             if (response.status) {
                 navigate('/home', {state: response.token});
@@ -38,11 +38,11 @@ function Login() {
      <label> Password:
          <input className="textBox" value={password} onChange={e => setPassword(e.target.value)}/>
      </label>
-
+      <div>
       <button onClick={loginDineWise}>
          Login
       </button>
-
+       </div>
       {loginErr !== "" ? <p className = 'err'>{loginErr}</p> : null}
     </div>
     </>
