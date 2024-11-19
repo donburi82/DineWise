@@ -7,7 +7,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 function Home() {
-  const TOKEN = "pk.eyJ1IjoiY2hpbmcxMjMiLCJhIjoiY20zb3EweXNjMDYzYzJ4b3Bwa20ycjB0aiJ9.nfmpz87HbiSNK_hbebk0tw";
+  const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
   const mapRef = useRef()
   const navigate = useNavigate();
   const location = useLocation();
