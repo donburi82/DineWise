@@ -1,0 +1,15 @@
+.textBox{
+margin : 5px;
+}
+
+.signUpButton{
+padding: 3px;
+margin: 0px;
+}
+.unClickable{
+background-color: white;
+color: grey;
+}
+.err{
+color: red;
+}
