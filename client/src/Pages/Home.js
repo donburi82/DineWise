@@ -22,6 +22,7 @@ function Home() {
        center: [-73.93, 40.73]
    });
 
+
       return () => {
         mapRef.current.remove()
       }

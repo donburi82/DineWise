@@ -32,7 +32,7 @@ function Login() {
                 setLoginErr(result.msg);
             }
         } catch (error) {
-            setLoginErr(error);
+            setLoginErr(error.message);
         }
     }
 
