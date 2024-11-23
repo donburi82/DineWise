@@ -5,24 +5,34 @@ import './Login.css';
 import {loginSuccess, loginFail} from '../Mock/LoginData'
 
 function Login() {
+    const serverBaseURL = process.env.REACT_APP_SERVER_API_BASE_URL;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginErr, setLoginErr] = useState('');
 
     const navigate = useNavigate();
-    function loginDineWise() {
-        if (email !== '' && password !== '') {
-            const data = {email: email, password: password};
-            //try login
-            const response = loginSuccess(data);
-            // if succeed
-            if (response.status) {
-                navigate('/home', {state: response.token});
-            } else {
-                setLoginErr(response.msg);
-            }
-        } else {
+
+    async function loginDineWise() {
+        if (email === '' || password === '') {
             setLoginErr('Please fill in your email and password');
+            return;
+        }
+        const data = {email: email, password: password};
+        const loginAPI = `${serverBaseURL}/auth/login`;
+        try {
+            const response = await fetch(loginAPI, {
+                   method: "POST",
+                   body: JSON.stringify(data),
+                   headers: {"Content-Type": "application/json"}
+             });
+            const result = await response.json();
+            if (result.status === 'success') {
+                navigate('/home', {state: result.token});
+            } else {
+                setLoginErr(result.msg);
+            }
+        } catch (error) {
+            setLoginErr(error);
         }
     }
 

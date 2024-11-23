@@ -7,9 +7,9 @@ import {verificationCodeSuccess, verificationCodeFail,
 import {useNavigate} from 'react-router-dom';
 
 function SignUp() {
+  const serverBaseURL = process.env.REACT_APP_SERVER_API_BASE_URL;
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [OPT, setOPT] = useState('');
   const [password, setPassword] = useState('');
@@ -20,49 +20,82 @@ function SignUp() {
 
   const navigate = useNavigate();
 
-  const sendOPT = () => {
-        if (email !== '') {
-            //post to /auth/getVerificationCode
-            const data = {email: email};
-            const response = verificationCodeSuccess(data);
-            if (!response.status) {
-                setOPTErr(response.msg);
-            } else {
+  async function sendOPT() {
+        if (email === '') {
+            setOPTErr('Please enter your email');
+            return;
+        }
+        const data = {email: email};
+        const getVerificationCodeAPI = `${serverBaseURL}/auth/getVerificationCode`;
+        try {
+            const response = await fetch(getVerificationCodeAPI, {
+                   method: 'POST',
+                   body: JSON.stringify(data),
+                   headers: {'Content-Type': 'application/json'}
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                //add symbol for success
                 setOPTErr('');
+            } else {
+                setOPTErr(result.msg);
             }
+        } catch (error) {
+            setOPTErr(error.message);
         }
   }
 
-  const verifyOPT = () => {
-      if (OPT !== '') {
-       //post to /auth/verify
-       const data = {email: email, verificationCode:OPT};
-       const response = verifySuccess(data);
-       if (response.status) {
-           //verified
-           setOPTVerified(true);
-           setOPTErr('');
-       } else {
-           setOPTVerified(false);
-           setOPTErr(response.msg);
-       }
-      }
+  async function verifyOPT() {
+        if (OPT === '') {
+            setOPTErr('Please enter verification code');
+            return;
+        }
+        const data = {email: email, verificationCode:OPT};
+        const verifyAPI = `${serverBaseURL}/auth/verify`;
+        try {
+            const response = await fetch(verifyAPI, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {'Content-Type': 'application/json'}
+                    });
+            const result = await response.json();
+            if (result.status === 'success') {
+               //verified
+               setOPTVerified(true);
+               setOPTErr('');
+            } else {
+               setOPTVerified(false);
+               setOPTErr(result.msg);
+            }
+        } catch(error) {
+            setOPTErr(error.message);
+        }
+
   }
 
-  const signUp = () => {
+  async function signUp () {
       if (canSignUp) {
-         const data = {firstName: firstName, lastName: lastName,
-            email: email, password: password}
+         const data = {name: name, email: email, password: password}
+         const signupAPI = `${serverBaseURL}/auth/signup`;
          //post to /auth/signup
-         const response = signupSuccess(data);
+         try {
+              const response = await fetch(signupAPI, {
+                     method: 'POST',
+                     body: JSON.stringify(data),
+                     headers: {'Content-Type': 'application/json'}
+                     });
+              const result = await response.json();
 
-         if (response.status) {
-            navigate('/login', {data: {jwt: response.token}});
-         } else {
-            setSignUpErr(response.msg);
+             if (result.status === 'success') {
+                navigate('/login', {data: {jwt: result.token}});
+             } else {
+                setSignUpErr(result.msg);
+             }
+         } catch (error) {
+             setSignUpErr(error.message);
          }
       } else {
-          if (firstName === '' || password === '' || password2 === '' || email === '') {
+          if (name === '' || password === '' || password2 === '' || email === '') {
             setSignUpErr('Please fill in all fields');
           }
           else if (password !== password2) {
@@ -74,8 +107,7 @@ function SignUp() {
       }
   }
 
-  const canSignUp = firstName !== ""
-                    && lastName !== ""
+  const canSignUp = name !== ""
                     && OPTVerified
                     && password !== ""
                     && password === password2;
@@ -86,13 +118,10 @@ function SignUp() {
     <h1> Sign Up</h1>
 
     <div>
-        <label> First name:
-         <input className="textBox" value={firstName} onChange={e => setFirstName(e.target.value)}/>
-        </label>
-    </div>
-        <label> Last name:
-            <input className="textBox" value={lastName} onChange={e => setLastName(e.target.value)}/>
+        <label> Name:
+            <input className="textBox" value={name} onChange={e => setName(e.target.value)}/>
          </label>
+    </div>
      <div>
          <label> Email:
               <input className="textBox" value={email} onChange={e => setEmail(e.target.value)}/>
