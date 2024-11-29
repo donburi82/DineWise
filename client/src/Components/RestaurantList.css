@@ -1,0 +1,10 @@
+.restaurant-img {
+  width: 120px;
+  height: 120px;
+  max-height:200px;
+}
+
+.restaurant-list{
+    list-style-type: none;
+    padding: 0;
+}

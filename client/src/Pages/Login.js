@@ -1,6 +1,7 @@
 import  React from 'react';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {AuthContext} from '../GlobalStates'
 import './Login.css';
 import {loginSuccess, loginFail} from '../Mock/LoginData'
 
@@ -9,6 +10,7 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginErr, setLoginErr] = useState('');
+    const [authState, setAuthState] = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -27,7 +29,8 @@ function Login() {
              });
             const result = await response.json();
             if (result.status === 'success') {
-                navigate('/home', {state: result.token});
+                setAuthState({jwt: result.token});
+                navigate('/home');
             } else {
                 setLoginErr(result.msg);
             }
