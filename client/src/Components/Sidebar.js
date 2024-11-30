@@ -5,8 +5,8 @@ import "./Sidebar.css"
 
 export const SidebarData = [
     {
-      title: "Home",
-      path: "/home",
+      title: "Search",
+      path: "/search",
       cName: "nav-text",
     },
     {
@@ -28,7 +28,7 @@ console.log(location.pathname);
     <>
      <div className='sidebar'>
       <div>
-      <p className='username'>User name</p>
+      <p className='username'>Username</p>
       </div>
       <nav>
          <ul className='nav-group'>

@@ -5,47 +5,95 @@ import {useNavigate, useLocation} from 'react-router-dom';
 import Map, {Marker, ScaleControl} from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import RoomIcon from '@mui/icons-material/Room';
 
-function MapboxMap({mapView}) {
+function MapboxMap({mapView, mapMarkers, onSelectMapMarker, selectedMapMarker}) {
   const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
   const location = useLocation();
   const jwt = location.state;
   const [viewState, setViewState] =  useState(mapView);
-  const debounceTimeout = useRef(null);
+  const [markers, setMarkers] = useState(mapMarkers);
+  const [selectedMarker, setSelectedMarker] = useState(selectedMapMarker);
+
+  const mapRef = useRef();
+
+  function positionInViewport(marker) {
+
+    const bounds = mapRef.current? mapRef.current.getBounds() : null;
+    if (bounds === null) {
+        return false;
+    }
+    return bounds.contains([marker.longitude, marker.latitude]);
+  }
 
   useEffect(() => {
-    if (
-          viewState.latitude !== mapView.latitude ||
-          viewState.longitude !== mapView.longitude ||
-          viewState.zoom !== mapView.zoom
-        ) {
-          setViewState(mapView);
-     }
+     setViewState(mapView);
   }, [mapView])
 
+  useEffect(() => {
+    setMarkers(mapMarkers);
+    setSelectedMarker(selectedMapMarker);
+    if (selectedMapMarker !== '') {
+        const selected = mapMarkers.filter(item => item.id == selectedMapMarker)[0];
+        if (!positionInViewport(selected)) {
+            setViewState(state => ({...state,
+                longitude: selected.longitude,
+                latitude: selected.latitude }));
+        }
+    }
+  }, [mapMarkers, selectedMapMarker])
 
-  function MapComponent() {
-   return(
-   <div style={{width: "500px", height: "400px"}} >
+  function Markers() {
+    if (markers.length === 0) {
+    return null;
+    }
+//    const currMarkers = selectedMarker === '' ? markers: markers.filter(item => item.id == selectedMarker);
+    const currMarkers = markers;
 
-   <Map reuseMaps
-      mapboxAccessToken= {TOKEN}
-      {...viewState}
-      onMove={(event) => setViewState(event.viewState)}
-      mapStyle='mapbox://styles/mapbox/streets-v12'
-
-    >
-      <Marker longitude={ -73.93} latitude={40.73} anchor="bottom" >
-        <img src="./pin.png" />
-      </Marker>
-    </Map>
-    </div>
-    )
+    return (
+        <>
+        {currMarkers.map((item) => {
+        return MarkerComponent(item);
+        })}
+        </>
+    );
   }
+
+  function onMarkerClick(marker) {
+    if (marker.id === selectedMarker) {
+        //unselect marker
+        setSelectedMarker('');
+        onSelectMapMarker('');
+//        setViewState(mapView);
+    }  else {
+        //select a different marker
+        setSelectedMarker(marker.id);
+        onSelectMapMarker(marker.id);
+//        setViewState(state => ({zoom: state.zoom + 0.3, longitude: marker.longitude, latitude: marker.latitude }));
+    }
+  }
+
+  function MarkerComponent(item) {
+    return (<Marker longitude={item.longitude} latitude={item.latitude} anchor="bottom" onClick={()=>onMarkerClick(item)} >
+               <RoomIcon style={{ color: item.id === selectedMarker ? 'red' : 'gray', fontSize:'40px' }} />
+           </Marker>);
+  }
+
 
   return (
     <>
-    <MapComponent />
+    <div style={{width: "500px", height: "400px"}} >
+
+       <Map reuseMaps
+          ref = {mapRef}
+          mapboxAccessToken= {TOKEN}
+          {...viewState}
+          onMove={(event) => setViewState(event.viewState)}
+          mapStyle='mapbox://styles/mapbox/streets-v12'
+        >
+        <Markers />
+       </Map>
+    </div>
     </>
   );
 }

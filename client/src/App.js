@@ -5,7 +5,7 @@ import './App.css';
 import Welcome from './Pages/Welcome';
 import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
-import Home from './Pages/Home';
+import Search from './Pages/Search';
 import Recommendations from './Pages/Recommendations';
 import SavedPlaces from './Pages/SavedPlaces';
 import {AuthProvider} from './GlobalStates';
@@ -18,7 +18,7 @@ function App() {
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/search" element={<Search />} />
         <Route path="/recommendations" element={<Recommendations />} />
         <Route path="/savedPlaces" element={<SavedPlaces />} />
     </Routes>

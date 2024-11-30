@@ -2,9 +2,30 @@
   width: 120px;
   height: 120px;
   max-height:200px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+
 }
 
-.restaurant-list{
+.restaurant-list {
     list-style-type: none;
     padding: 0;
+    margin: 0px;
+}
+
+.selected {
+border-style: solid;
+   border-color: pink;
+   border-width: 5px;
+}
+
+.text{
+   margin:2px;
+   text-decoration: none;
+}
+
+.rating-review-text{
+   margin:2px;
+   text-decoration: none;
+   color: gray;
 }

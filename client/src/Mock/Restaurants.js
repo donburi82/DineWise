@@ -70,7 +70,7 @@ export function searchSuccess2(json) {
             img: 'https://s3-media0.fl.yelpcdn.com/bphoto/CHFKBpewP6L8Ku4fVuuk3w/o.jpg',
             review_count: 100,
             price: '$',
-            coordinates: {longsitude: -72.93,latitude: 40.73},
+            coordinates: {longitude: -72.93,latitude: 40.73},
             is_open_now: true,
             business_hour: '8am Mon',
         }
