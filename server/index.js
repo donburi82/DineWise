@@ -7,16 +7,17 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-// const { User } = require('./models/user.js');
 const { dbConnection } = require('./db/dbConnection');
 const authRoute = require('./routes/auth/index.js');
 const restaurantsRoute = require('./routes/restaurants/index.js');
+const favoritesRoute = require('./routes/favorites/index.js');
 const auth = require('./middleware/auth/index.js');
 
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/auth', authRoute);
 app.use('/restaurants', auth, restaurantsRoute);
+app.use('/favorites', auth, favoritesRoute);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
