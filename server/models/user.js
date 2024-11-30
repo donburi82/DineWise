@@ -13,6 +13,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  favorites: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Restaurant',
+  },
 });
 
 UserSchema.methods.createJWT = function () {
