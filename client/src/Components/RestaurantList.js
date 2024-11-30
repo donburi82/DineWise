@@ -4,9 +4,12 @@ import {useNavigate, useLocation, Link} from 'react-router-dom';
 import "./RestaurantList.css"
 import StarIcon from '@mui/icons-material/Star';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
+import Dialog from '@mui/material/Dialog';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
 
 function RestaurantList({restaurants, onSelectRestaurant, selected}) {
   const [selectedRestaurant, setSelectedRestaurant] = useState(selected);
+  const [openDialog, setOpenDialog] = useState(false);
 
   function handleRestaurantClick(id) {
     if (selectedRestaurant !== id) {
@@ -39,6 +42,13 @@ function RestaurantList({restaurants, onSelectRestaurant, selected}) {
 
   }
 
+  function handleSave(id) {
+    setOpenDialog(true);
+  }
+  function handleClose (value) {
+      setOpenDialog(false);
+  }
+
   return (
     <>
      <div>
@@ -50,13 +60,14 @@ function RestaurantList({restaurants, onSelectRestaurant, selected}) {
                  <h3 style={{marginLeft:'20px'}}>{item.name}</h3>
                  <div style={{display:"flex", flexDirection:"row"}}>
                      <div style={{display:"flex", flex: 3, flexDirection:"column", marginRight:'20px'}}>
-                         <div style={{marginLeft:'20px', marginRight:'20px'}}>
+                         <div style={{marginLeft:'20px', marginRight:'20px',  display: 'flex', flexDirection:'column' }}>
                          <div style={{alignItems: 'center', display: 'flex'}}>
                              <RatingComponent rating={item.rating}/>
                              <span className='rating-review-text'>({item.review_count})</span>
                          </div>
                              <p className='text'>{item.is_open_now ? "Open - " + item.business_hour :"Closed"}</p>
                               <a href= {item.url} className='text'> Yelp page </a>
+                              <button className="save-button" onClick={()=>handleSave(item.id)}>{item.saved? 'Saved': 'Save food place'}</button>
                          </div>
                      </div>
                      <div style={{display:"flex", flex:1}}>
@@ -69,6 +80,9 @@ function RestaurantList({restaurants, onSelectRestaurant, selected}) {
      })}
      </ul>
      </div>
+     <Dialog open={openDialog} onClose={handleClose}>
+     <p>Save?</p>
+     </Dialog>
     </>
   );
 }

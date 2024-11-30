@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect, useRef, useContext} from 'react';
-import {AuthContext} from '../GlobalStates'
+import {GeoContext, AuthContext} from '../GlobalStates'
 import {useNavigate, useLocation} from 'react-router-dom';
 import ListMapView from '../Components/RestaurantList-Map';
 import SideBar from '../Components/Sidebar';
@@ -9,14 +9,29 @@ import './Recommendations.css'
 
 const categories = [
     {
-        id:'chinese',
-        name: 'Chinese',
-        imgPath: 'Chinese.jpg'
+        id:'gluten_free',
+        name: 'gluten_free',
+        color: '#469990'
     },
     {
-        id: 'fast-food',
-        name: 'Fast Food',
-        imgPath:'FastFood.png'
+        id: 'halal',
+        name: 'halal',
+        color: '#dcbeff'
+    },
+    {
+        id: 'kosher',
+        name: 'kosher',
+        color: '#9A6324'
+    },
+    {
+        id: 'vegan',
+        name: 'vegan',
+        color: '#808000'
+    },
+    {
+        id: 'vegetarian',
+        name: 'vegetarian',
+        color: '#fffac8'
     }
 ]
 
@@ -27,6 +42,7 @@ function Recommendations() {
   const navigate = useNavigate();
   const location = useLocation();
   const [authState, setAuthState] = useContext(AuthContext);
+  const [geolocation, setGeolocation] = useContext(GeoContext);
 
   const jwt = authState? JSON.stringify(authState.jwt): null;
 
@@ -47,27 +63,26 @@ function Recommendations() {
       };
 
       const response = searchSuccess2(data)
-      if (response.status === 'success') {
-        console.log('success');
 
-        //how should we deal with 0 results?
-        //setup restaurant list
-        setResults(response.businesses);
+       if (response.status === 'success' && response.restaurants.length !== 0) {
+           console.log('success');
 
-        //setup map
-        const mapCenter = response.region.center;
-        setMapView({longitude: mapCenter.longitude, latitude: mapCenter.latitude, zoom: 8});
-        const markerData = response.businesses.map(b => ({
-           id: b.id,
-           longitude: b.coordinates.longitude,
-           latitude: b.coordinates.latitude
-        }));
-        console.log(markerData);
-        setMapMarkers(markerData);
+           setResults(response.restaurants);
 
-      } else {
-        console.log('Failed search');
-      }
+           //setup map
+           const mapCenter = response.center;
+           setMapView({longitude: mapCenter.longitude, latitude: mapCenter.latitude, zoom: 8});
+           const markerData = response.restaurants.map(r => ({
+               id: r.id,
+               longitude: r.coordinates.longitude,
+               latitude: r.coordinates.latitude
+           }));
+           console.log(markerData);
+           setMapMarkers(markerData);
+
+       } else {
+           console.log('Failed search');
+       }
   }
 
   function CategoriesComponent() {
@@ -75,8 +90,7 @@ function Recommendations() {
         <div className='categories'>
         {categories.map((item) =>
         <div className={category===item.name? 'category-clicked':''}>
-        <button onClick={()=>setCategory(item.name)} className='button'>
-        <img src={`/images/${item.imgPath}`} alt='img' className='category-img'/>
+        <button onClick={()=>setCategory(item.name)} style={{backgroundColor: item.color}}className='button'>
         <p>{item.name}</p>
         </button>
         </div>
@@ -94,7 +108,8 @@ function Recommendations() {
      <CategoriesComponent / >
      <ListMapView results={results} mapView={mapView} mapMarkers={mapMarkers} />
     </div>
-
+    <p>{geolocation.latitude}</p>
+    <p>{geolocation.longitude}</p>
     </div>
   );
 }

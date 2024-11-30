@@ -29,3 +29,15 @@ border-style: solid;
    text-decoration: none;
    color: gray;
 }
+
+.save-button {
+   border: none;
+   background-color: none;
+   text-align:left;
+
+   margin:0px;
+   padding-top:10px;
+   padding-bottom:10px;
+    width: 120px;
+   color: blue;
+}

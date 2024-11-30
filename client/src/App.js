@@ -8,12 +8,13 @@ import SignUp from './Pages/SignUp';
 import Search from './Pages/Search';
 import Recommendations from './Pages/Recommendations';
 import SavedPlaces from './Pages/SavedPlaces';
-import {AuthProvider} from './GlobalStates';
+import {AuthProvider, GeoProvider} from './GlobalStates';
 
 function App() {
   return (
    <BrowserRouter>
    <AuthProvider>
+   <GeoProvider>
     <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<Login />} />
@@ -22,6 +23,7 @@ function App() {
         <Route path="/recommendations" element={<Recommendations />} />
         <Route path="/savedPlaces" element={<SavedPlaces />} />
     </Routes>
+    </GeoProvider>
     </AuthProvider>
    </BrowserRouter>
   );

@@ -1,6 +1,6 @@
 export function searchSuccess1(json) {
     console.log(json);
-    const businesses =  [
+    const restaurants =  [
         {
             id: 1,
             name: 'Clinton Street Baking Company',
@@ -27,18 +27,17 @@ export function searchSuccess1(json) {
         }
     ];
 
-    return {status: 'success', businesses: businesses, total: 2,
-    region: {
-             center: {
-                 longitude: -73.99429321289062,
-                 latitude: 40.70544486444615
-             }
-         }}
+    return {status: 'success', restaurants: restaurants, total: 2,
+         center: {
+             longitude: -73.99429321289062,
+             latitude: 40.70544486444615
+         }
+         }
 }
 
 export function searchSuccess2(json) {
     console.log(json);
-    const businesses =  [
+    const restaurants =  [
         {
             id: 1,
             name: 'Clinton Street Baking Company',
@@ -76,11 +75,10 @@ export function searchSuccess2(json) {
         }
     ];
 
-    return {status: 'success', businesses: businesses, total: 2,
-    region: {
-             center: {
-                 longitude: -73.99429321289062,
-                 latitude: 40.70544486444615
-             }
-         }}
+    return {status: 'success', restaurants: restaurants, total: 2,
+         center: {
+             longitude: -73.99429321289062,
+             latitude: 40.70544486444615
+         }
+         }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import {useState, useEffect, useRef, useContext} from 'react';
-import {AuthContext} from '../GlobalStates'
+import {AuthContext, GeoContext} from '../GlobalStates';
 import './Search.css';
 import {useNavigate, useLocation} from 'react-router-dom';
 import MapboxMap from '../Components/Map';
@@ -12,8 +12,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import TuneIcon from '@mui/icons-material/Tune';
 import Checkbox from '@mui/material/Checkbox';
 
+
 function Search() {
 
+  const [geolocation, setGeolocation] = useContext(GeoContext);
   const navigate = useNavigate();
   const location = useLocation();
   const [authState, setAuthState] = useContext(AuthContext);
@@ -22,7 +24,7 @@ function Search() {
   const [filterIsPressed, setFilterIsPressed] = useState(false);
 
   const [openNow, setOpenNow] = useState(true);
-  const [prices, setPrices] = useState([1,2,3,4]);
+  const [prices, setPrices] = useState([true, true, true, true]);
 
   const [results, setResults] = useState();
   const [mapView, setMapView] = useState({longitude: -73.93,latitude: 40.73, zoom: 10});
@@ -35,81 +37,109 @@ function Search() {
 
   },[])
 
-  function updatePrices(price) {
-    const p = prices;
-    var index = p.indexOf(price);
-    if (index > -1) {
-        p.splice(index, 1);
-    } else{
-        p.push(price);
-    }
-    setPrices(p);
-  }
+  useEffect(() => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setGeolocation({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          },
+          (error) => {
+            console.error('Error getting geolocation:', error);
+          }
+        );
+      } else {
+        console.error('Geolocation not supported by your browser.');
+      }
+    }, []);
+
+  function updatePrices(index) {
+    setPrices((prevPrices) =>
+     prevPrices.map((checked, i) => (i === index ? !checked : checked))
+    );
+  };
 
   function getSearchResults() {
     console.log('searched');
     console.log(openNow);
     console.log(prices);
-    //change location, price ...
+
     setSearchIsPressed(true); // Change color on press
-    getRestaurants(search, 'New York', [1,2,3,4], true);
+    const possiblePrices = [1, 2, 3, 4];
+    const acceptedPrices = possiblePrices.filter(d => prices[d - 1]);
+    console.log(acceptedPrices);
+
+    const data = {
+        term: search,
+        latitude: geolocation.latitude,
+        longitude:geolocation.longitude,
+        price: acceptedPrices,
+        open_now: openNow,
+    };
+
+    const response = search === 'asdf' ? searchSuccess2(data) : searchSuccess1(data);
+    if (response.status === 'success' && response.restaurants.length !== 0) {
+        console.log('success');
+
+        setResults(response.restaurants);
+
+        //setup map
+        const mapCenter = response.center;
+        setMapView({longitude: mapCenter.longitude, latitude: mapCenter.latitude, zoom: 8});
+        const markerData = response.restaurants.map(r => ({
+            id: r.id,
+            longitude: r.coordinates.longitude,
+            latitude: r.coordinates.latitude
+        }));
+        console.log(markerData);
+        setMapMarkers(markerData);
+
+    } else {
+        console.log('Failed search');
+    }
     setTimeout(() => setSearchIsPressed(false), 300); // Reset color after 200ms
-  }
-
-  function getRestaurants(term, location, price, open_now) {
-        const data = {
-            term: term,
-            location: location,
-            price: price,
-            open_now: open_now,
-        };
-        const response = search === 'asdf' ? searchSuccess2(data) : searchSuccess1(data);
-        if (response.status === 'success') {
-            console.log('success');
-
-            //how should we deal with 0 results?
-            //setup restaurant list
-            setResults(response.businesses);
-
-            //setup map
-            const mapCenter = response.region.center;
-            setMapView({longitude: mapCenter.longitude, latitude: mapCenter.latitude, zoom: 8});
-            const markerData = response.businesses.map(b => ({
-                id: b.id,
-                longitude: b.coordinates.longitude,
-                latitude: b.coordinates.latitude
-            }));
-            console.log(markerData);
-            setMapMarkers(markerData);
-
-        } else {
-            console.log('Failed search');
-        }
   }
 
   function FilterOptions() {
   return(
         <div>
-            <label>
-              <Checkbox onChange={() => updatePrices(1)} defaultChecked/>
-               $
-            </label>
-            <label>
-                <Checkbox  onChange={() => updatePrices(2)} defaultChecked/>
-                 $$
-            </label>
-            <label>
-                <Checkbox onChange={() => updatePrices(3)} defaultChecked/>
-                 $$$
-            </label>
-            <label>
-              <Checkbox onChange={() => updatePrices(4)} defaultChecked/>
-                  $$$$
-            </label>
-            <label>
-                <Checkbox onChange={()=> setOpenNow(!openNow)} defaultChecked/>
-                    open_now
-            </label>
+             <label>
+                <Checkbox
+                  checked={prices[0]} // Controlled by state
+                  onChange={() => updatePrices(0)}
+                />
+                $
+              </label>
+              <label>
+                <Checkbox
+                  checked={prices[1]} // Controlled by state
+                  onChange={() => updatePrices(1)}
+                />
+                $$
+              </label>
+              <label>
+                <Checkbox
+                  checked={prices[2]} // Controlled by state
+                  onChange={() => updatePrices(2)}
+                />
+                $$$
+              </label>
+              <label>
+                <Checkbox
+                  checked={prices[3]} // Controlled by state
+                  onChange={() => updatePrices(3)}
+                />
+                $$$$
+              </label>
+              <label>
+                <Checkbox
+                  checked={openNow} // Controlled by state
+                  onChange={() => setOpenNow(!openNow)}
+                />
+                open_now
+              </label>
         </div>
         );
   }
@@ -130,6 +160,8 @@ function Search() {
           { filterIsPressed ?<FilterOptions />: null}
          <ListMapView results={results} mapView={mapView} mapMarkers={mapMarkers} />
          </div>
+         <p>{geolocation.latitude}</p>
+         <p>{geolocation.longitude}</p>
     </div>
   );
 }
