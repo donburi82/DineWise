@@ -13,6 +13,7 @@ build
 
 # misc
 .DS_Store
+server/.env
 client/.env
 .env.local
 .env.development.local
@@ -27,3 +28,6 @@ yarn-error.log*
 .eslintrc
 .prettierrc
 .prettierignore
+.vscode/
+package-lock.json
+package.json
