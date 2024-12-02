@@ -1,9 +1,6 @@
 import React from 'react';
 import {useState} from 'react';
 import './SignUp.css';
-import {verificationCodeSuccess, verificationCodeFail,
-    verifySuccess, verifyFail,
-    signupSuccess, signupFail} from '../Mock/SignUpData';
 import {useNavigate} from 'react-router-dom';
 
 function SignUp() {

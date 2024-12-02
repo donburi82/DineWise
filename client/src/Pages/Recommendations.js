@@ -4,7 +4,6 @@ import {GeoContext, AuthContext} from '../GlobalStates'
 import {useNavigate, useLocation} from 'react-router-dom';
 import ListMapView from '../Components/RestaurantList-Map';
 import SideBar from '../Components/Sidebar';
-import {searchSuccess2} from '../Mock/Restaurants';
 import './Recommendations.css'
 
 const categories = [

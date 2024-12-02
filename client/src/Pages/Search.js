@@ -7,7 +7,6 @@ import MapboxMap from '../Components/Map';
 import SideBar from '../Components/Sidebar';
 import ListMapView from '../Components/RestaurantList-Map';
 import RestaurantList from '../Components/RestaurantList';
-import {searchSuccess1, searchSuccess2} from '../Mock/Restaurants.js';
 import SearchIcon from '@mui/icons-material/Search';
 import TuneIcon from '@mui/icons-material/Tune';
 import Checkbox from '@mui/material/Checkbox';

@@ -3,7 +3,6 @@ import {useState, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {AuthContext} from '../GlobalStates'
 import './Login.css';
-import {loginSuccess, loginFail} from '../Mock/LoginData'
 
 function Login() {
     const serverBaseURL = process.env.REACT_APP_SERVER_API_BASE_URL;
