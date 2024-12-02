@@ -1,14 +1,15 @@
 import  React from 'react';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {AuthContext} from '../GlobalStates'
 import './Login.css';
-import {loginSuccess, loginFail} from '../Mock/LoginData'
 
 function Login() {
     const serverBaseURL = process.env.REACT_APP_SERVER_API_BASE_URL;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginErr, setLoginErr] = useState('');
+    const [authState, setAuthState] = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -27,7 +28,8 @@ function Login() {
              });
             const result = await response.json();
             if (result.status === 'success') {
-                navigate('/home', {state: result.token});
+                setAuthState({jwt: result.token});
+                navigate('/search');
             } else {
                 setLoginErr(result.msg);
             }
@@ -38,10 +40,10 @@ function Login() {
 
   return (
     <>
-    <div style={{display:"flex", flexDirection: "column", alignItems:"left", margin:"20px"}}>
+    <div style={{display:"flex", flexDirection: "column", alignItems:"center", margin:100}}>
     <h1> Login</h1>
 
-    <label> Email:
+     <label> Email:
         <input className="textBox" value={email} onChange={e => setEmail(e.target.value)}/>
      </label>
 
@@ -49,7 +51,7 @@ function Login() {
          <input className="textBox" value={password} onChange={e => setPassword(e.target.value)}/>
      </label>
       <div>
-      <button onClick={loginDineWise}>
+      <button onClick={loginDineWise} className='login-button'>
          Login
       </button>
        </div>
