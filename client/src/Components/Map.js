@@ -1,7 +1,6 @@
 import React from 'react';
 import {useState, useEffect, useRef} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-//import ReactMapGL from 'react-map-gl';
 import Map, {Marker, ScaleControl} from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -34,8 +33,8 @@ function MapboxMap({mapView, mapMarkers, onSelectMapMarker, selectedMapMarker}) 
     setMarkers(mapMarkers);
     setSelectedMarker(selectedMapMarker);
     if (selectedMapMarker !== '') {
-        const selected = mapMarkers.filter(item => item.id == selectedMapMarker)[0];
-        if (!positionInViewport(selected)) {
+        const selected = mapMarkers.filter(item => item.business_id == selectedMapMarker)[0];
+        if (selected !== undefined && !positionInViewport(selected)) {
             setViewState(state => ({...state,
                 longitude: selected.longitude,
                 latitude: selected.latitude }));
@@ -47,7 +46,6 @@ function MapboxMap({mapView, mapMarkers, onSelectMapMarker, selectedMapMarker}) 
     if (markers.length === 0) {
     return null;
     }
-//    const currMarkers = selectedMarker === '' ? markers: markers.filter(item => item.id == selectedMarker);
     const currMarkers = markers;
 
     return (
@@ -60,22 +58,27 @@ function MapboxMap({mapView, mapMarkers, onSelectMapMarker, selectedMapMarker}) 
   }
 
   function onMarkerClick(marker) {
-    if (marker.id === selectedMarker) {
+    if (marker.business_id === selectedMarker) {
         //unselect marker
         setSelectedMarker('');
         onSelectMapMarker('');
-//        setViewState(mapView);
     }  else {
         //select a different marker
-        setSelectedMarker(marker.id);
-        onSelectMapMarker(marker.id);
-//        setViewState(state => ({zoom: state.zoom + 0.3, longitude: marker.longitude, latitude: marker.latitude }));
+        setSelectedMarker(marker.business_id);
+        onSelectMapMarker(marker.business_id);
     }
   }
 
   function MarkerComponent(item) {
-    return (<Marker longitude={item.longitude} latitude={item.latitude} anchor="bottom" onClick={()=>onMarkerClick(item)} >
-               <RoomIcon style={{ color: item.id === selectedMarker ? 'red' : 'gray', fontSize:'40px' }} />
+    return (<Marker longitude={item.longitude} latitude={item.latitude} anchor="bottom"
+                onClick={()=>onMarkerClick(item)} >
+               <RoomIcon style={{ position: 'fixed',
+                color: item.business_id === selectedMarker ? 'red' : 'gray',
+                fontSize:'40px' ,
+                opacity: item.business_id === selectedMarker ? 1 : 0.9,
+                zIndex:item.business_id === selectedMarker ? 9999: 800,
+                stroke: 'white',
+                strokeWidth: 0.3}} />
            </Marker>);
   }
 
@@ -83,7 +86,6 @@ function MapboxMap({mapView, mapMarkers, onSelectMapMarker, selectedMapMarker}) 
   return (
     <>
     <div style={{width: "500px", height: "400px"}} >
-
        <Map reuseMaps
           ref = {mapRef}
           mapboxAccessToken= {TOKEN}

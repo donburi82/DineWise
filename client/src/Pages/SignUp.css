@@ -4,12 +4,9 @@ margin : 5px;
 
 .signUpButton{
 padding: 3px;
-margin: 0px;
+margin: 20px;
 }
-.unClickable{
-background-color: white;
-color: grey;
-}
+
 .err{
 color: red;
 }

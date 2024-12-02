@@ -1,6 +1,7 @@
 import React from 'react';
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef, useContext} from 'react';
 import {useNavigate, useLocation, Link} from 'react-router-dom';
+import {AuthContext} from '../GlobalStates'
 import "./Sidebar.css"
 
 export const SidebarData = [
@@ -19,17 +20,24 @@ export const SidebarData = [
       path: "/savedPlaces",
       cName: "nav-text",
     }
+
  ];
 
 function Sidebar() {
+  const [authState, setAuthState] = useContext(AuthContext);
   const location = useLocation();
-console.log(location.pathname);
+  const navigate = useNavigate();
+
+  function logout() {
+      setAuthState();
+      alert('logout');
+      navigate('/login');
+  }
+
   return (
     <>
      <div className='sidebar'>
-      <div>
-      <p className='username'>Username</p>
-      </div>
+     <div>
       <nav>
          <ul className='nav-group'>
          {SidebarData.map((item, index) => {
@@ -43,6 +51,10 @@ console.log(location.pathname);
              })}
          </ul>
       </nav>
+      </div>
+      <div>
+      <button className='logout' onClick={logout}>Logout</button>
+      </div>
      </div>
     </>
   );

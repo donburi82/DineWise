@@ -114,9 +114,8 @@ function SignUp() {
 
   return (
     <>
-    <div style={{display:"flex", flexDirection: "column", alignItems:"left", margin:"20px"}}>
+    <div style={{display:"flex", flexDirection: "column", alignItems:"center", marginTop:'100px',margin:"20px"}}>
     <h1> Sign Up</h1>
-
     <div>
         <label> Name:
             <input className="textBox" value={name} onChange={e => setName(e.target.value)}/>
@@ -145,7 +144,7 @@ function SignUp() {
       <input className="textBox" value={password2} onChange={e => setPassword2(e.target.value)}/>
       </label>
       <div>
-           <button className={canSignUp === true ? "signUpButton" : "unClickable"} onClick={signUp}>
+           <button className="signUpButton" onClick={signUp}>
             SIGN UP
            </button>
        </div>

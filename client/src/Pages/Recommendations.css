@@ -5,6 +5,8 @@ height:50px;
 
 .button{
 background-color:none;
+margin-right: 20px;
+border-radius: 12px;
 }
 
 .categories{
@@ -12,6 +14,7 @@ display:flex;
 flex-direction:row;
 margin-bottom:10px;
 }
+
 .category-clicked{
 background-color: #f1f1f1;
 }

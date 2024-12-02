@@ -1,14 +1,12 @@
 .textBox{
-margin : 5px;
+margin : 50px;
+padding: 5px;
 }
 
-.signUpButton{
-padding: 3px;
-margin: 0px;
-}
-.unClickable{
-background-color: pink;
-color: red;
+.login-button{
+padding: 5px;
+margin: 30px;
+font-size:18px;
 }
 .err{
 color:red;

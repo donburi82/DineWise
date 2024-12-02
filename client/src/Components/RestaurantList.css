@@ -4,7 +4,6 @@
   max-height:200px;
   margin-bottom: 20px;
   margin-right: 20px;
-
 }
 
 .restaurant-list {
@@ -20,8 +19,7 @@ border-style: solid;
 }
 
 .text{
-   margin:2px;
-   text-decoration: none;
+   margin:5px;
 }
 
 .rating-review-text{
@@ -34,10 +32,11 @@ border-style: solid;
    border: none;
    background-color: none;
    text-align:left;
-
-   margin:0px;
-   padding-top:10px;
-   padding-bottom:10px;
-    width: 120px;
-   color: blue;
+   margin:2px;
+}
+.yelp-link {
+   margin-top:20px;
+   margin-left:5px;
+   width:80px;
+   text-decoration: none;
 }

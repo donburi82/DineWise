@@ -30,7 +30,7 @@ function Login() {
             const result = await response.json();
             if (result.status === 'success') {
                 setAuthState({jwt: result.token});
-                navigate('/home');
+                navigate('/search');
             } else {
                 setLoginErr(result.msg);
             }
@@ -41,10 +41,10 @@ function Login() {
 
   return (
     <>
-    <div style={{display:"flex", flexDirection: "column", alignItems:"left", margin:"20px"}}>
+    <div style={{display:"flex", flexDirection: "column", alignItems:"center", margin:100}}>
     <h1> Login</h1>
 
-    <label> Email:
+     <label> Email:
         <input className="textBox" value={email} onChange={e => setEmail(e.target.value)}/>
      </label>
 
@@ -52,7 +52,7 @@ function Login() {
          <input className="textBox" value={password} onChange={e => setPassword(e.target.value)}/>
      </label>
       <div>
-      <button onClick={loginDineWise}>
+      <button onClick={loginDineWise} className='login-button'>
          Login
       </button>
        </div>
