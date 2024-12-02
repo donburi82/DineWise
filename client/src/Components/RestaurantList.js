@@ -90,7 +90,6 @@ function RestaurantList({restaurants, onSelectRestaurant, selected, onDelete}) {
                     'Authorization': 'Bearer ' + JSON.stringify(authState.jwt).slice(1, -1)}
        });
        const result = await response.json();
-       console.log(result);
        if (result.status === 'success') {
          const restaurantIds = result.data.map(d => d.business_id);
          setSavedRestaurants(restaurantIds);
@@ -151,10 +150,8 @@ function RestaurantList({restaurants, onSelectRestaurant, selected, onDelete}) {
               }
           } else {
               alert(result.msg);
-              console.log(result.msg);
           }
       } catch (error) {
-          console.log('error' + error);
           alert('error' + error);
       }
   }
@@ -185,7 +182,6 @@ function RestaurantList({restaurants, onSelectRestaurant, selected, onDelete}) {
       for (var i = 0; i < schedule.length; i++) {
          const openHours = schedule[i];
          if (openHours.day === day) {
-         console.log('here');
              if (openHours.startH > hour || openHours.endH < hour) {
                 break; //closed
              }

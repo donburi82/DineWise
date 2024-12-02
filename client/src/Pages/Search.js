@@ -92,7 +92,6 @@ function Search() {
                                  'Authorization': 'Bearer ' + JSON.stringify(authState.jwt).slice(1, -1)}
                  });
         const result = await response.json();
-        console.log(result);
         if (result.status === 'success') {
             if (result.data.restaurants.length === 0) {
                 setError('No result found');
@@ -103,7 +102,6 @@ function Search() {
 
             //setup map
             const mapCenter = result.data.center;
-            console.log(mapCenter);
             setMapView({longitude: mapCenter.longitude, latitude: mapCenter.latitude, zoom: 15});
             const markerData = result.data.restaurants.map(r => ({
                 business_id: r.business_id,
@@ -111,14 +109,12 @@ function Search() {
                 latitude: r.coordinates.latitude
             }));
 
-            console.log(markerData);
             setMapMarkers(markerData);
 
         } else {
             setError('Fail to load restaurants');
         }
     } catch (error) {
-        console.log('error' + error);
         setError('Fail to load restaurants');
     }
     setTimeout(() => setSearchIsPressed(false), 300); // Reset color after 200ms

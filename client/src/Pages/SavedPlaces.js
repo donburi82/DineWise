@@ -38,7 +38,6 @@ function SavedPlaces() {
                         'Authorization': 'Bearer ' + JSON.stringify(authState.jwt).slice(1, -1)}
            });
            const result = await response.json();
-           console.log(result);
            if (result.status === 'success') {
              if (result.data.length === 0){
                 setMessage('No saved places yet.');
@@ -46,14 +45,12 @@ function SavedPlaces() {
              }
              setResults(result.data);
              const mapCenter = result.data[0].coordinates;
-             console.log(mapCenter);
              setMapView({longitude: mapCenter.longitude, latitude: mapCenter.latitude, zoom: 12});
              const markerData = result.data.map(r => ({
                  business_id: r.business_id,
                  longitude: r.coordinates.longitude,
                  latitude: r.coordinates.latitude
              }));
-             console.log(markerData);
              setMapMarkers(markerData);
            } else {
                alert('error loading favorites');

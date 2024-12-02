@@ -82,7 +82,6 @@ function Recommendations() {
           });
           const result = await response.json();
           if (result.status === 'success') {
-               console.log('success');
                 if (result.data.restaurants.length === 0) {
                    setError('No suggested restaurants');
                    return;
@@ -96,7 +95,6 @@ function Recommendations() {
                    longitude: r.coordinates.longitude,
                    latitude: r.coordinates.latitude
                }));
-               console.log(markerData);
                setMapMarkers(markerData);
           } else {
                console.log('Failed search');
