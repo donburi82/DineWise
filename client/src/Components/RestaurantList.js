@@ -192,7 +192,15 @@ function RestaurantList({restaurants, onSelectRestaurant, selected, onDelete}) {
                 break;
              }
              open = true;
-             openTill = openHours.endH.toString() + ':' + openHours.endM.toString();
+             var openH = openHours.endH.toString();
+             var openM = openHours.endM.toString();
+             if (openH.length < 2) {
+                openH = '0' + openH;
+             }
+             if (openM.length < 2) {
+                openM = '0' + openM;
+             }
+             openTill = openH + ':' + openM;
          }
       }
 
@@ -224,8 +232,7 @@ function RestaurantList({restaurants, onSelectRestaurant, selected, onDelete}) {
                  <div style={{display:"flex", flexDirection:"column", wordBreak: 'break-word'}}>
                  <h3 style={{marginLeft:'20px', marginRight: '20px'}}>{item.name}</h3>
                  <div style={{display:"flex", flexDirection:"row"}}>
-
-                     <div style={{display:"flex", flex: 3, flexDirection:"column", marginRight:'20px'}}>
+                     <div style={{display:"flex", flex: 4, flexDirection:"column", marginRight:'20px'}}>
                          <div style={{marginLeft:'20px', marginRight:'20px',  display: 'flex', flexDirection:'column' }}>
                          <div style={{alignItems: 'center', display: 'flex'}}>
                              <RatingComponent rating={item.rating}/>

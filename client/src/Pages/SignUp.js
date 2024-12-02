@@ -111,7 +111,7 @@ function SignUp() {
 
   return (
     <>
-    <div style={{display:"flex", flexDirection: "column", alignItems:"center", marginTop:'100px',margin:"20px"}}>
+    <div style={{display:"flex", flexDirection: "column", alignItems:"center", marginTop:'180px',marginBottom:"20px"}}>
     <h1> Sign Up</h1>
     <div>
         <label> Name:

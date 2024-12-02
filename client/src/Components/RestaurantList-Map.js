@@ -32,7 +32,7 @@ function ListMapView({results, mapView, mapMarkers, onDelete}) {
                          onDelete={onDelete}
                          /> : null}
          </div>
-         <div style={{width: '550px', marginLeft: 480, position: 'fixed',}}>
+         <div style={{marginLeft: 480, position: 'fixed',}}>
             {results ? <MapboxMap
                         mapView={mapView}
                         mapMarkers={mapMarkers}
