@@ -85,13 +85,14 @@ function MapboxMap({mapView, mapMarkers, onSelectMapMarker, selectedMapMarker}) 
 
   return (
     <>
-    <div style={{width: "500px", height: "400px"}} >
+    <div style={{width: "600px", height: "500px"}} >
        <Map reuseMaps
           ref = {mapRef}
           mapboxAccessToken= {TOKEN}
           {...viewState}
           onMove={(event) => setViewState(event.viewState)}
           mapStyle='mapbox://styles/mapbox/streets-v12'
+          onRender={(event) => event.target.resize()}
         >
         <Markers />
        </Map>

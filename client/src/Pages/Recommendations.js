@@ -97,10 +97,12 @@ function Recommendations() {
                }));
                setMapMarkers(markerData);
           } else {
+               setError('Fail to load restaurants');
                console.log('Failed search');
           }
       } catch (error) {
         console.log('error:' + error);
+        setError('Fail to load restaurants');
       }
   }
 
@@ -133,6 +135,7 @@ function Recommendations() {
      <CategoriesComponent / >
      </div>
      <div style={{marginTop: 180}}>
+     {error !== '' ? <p>{error}</p>:null}
      <ListMapView results={results} mapView={mapView} mapMarkers={mapMarkers} />
      </div>
     </div>
