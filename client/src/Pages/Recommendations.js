@@ -9,31 +9,31 @@ import './Recommendations.css'
 const categories = [
     {
         id:'Gluten_free',
-        name: 'Gluten_free',
+        name: 'gluten_free',
         color: '#469990',
         textColor: 'white'
     },
     {
         id: 'Halal',
-        name: 'Halal',
+        name: 'halal',
         color: '#dcbeff'
     },
     {
         id: 'Kosher',
-        name: 'Kosher',
+        name: 'kosher',
         color: '#9A6324',
         textColor: 'white'
     },
 
     {
         id: 'Vegetarian',
-        name: 'Vegetarian',
+        name: 'vegetarian',
         color: '#fffac8'
     },
 
     {
         id: 'Vegan',
-        name: 'Vegan',
+        name: 'vegan',
         color: '#808000',
         textColor: 'white'
     }
@@ -66,6 +66,9 @@ function Recommendations() {
 
   async function getRecommendations() {
       //post to backend with data
+      console.log(category);
+      setError('');
+      setResults();
       const data = {
         longitude: geolocation.longitude,
         latitude:geolocation.latitude,
@@ -112,11 +115,11 @@ function Recommendations() {
         {categories.map((item) =>
         <div>
         <button onClick={()=>setCategory(item.name)}
-        style={{backgroundColor: category === item.id? 'white': item.color,
-                border: category === item.id? 3: 0,
+        style={{backgroundColor: category === item.name? 'white': item.color,
+                border: category === item.name? 3: 0,
                 borderStyle: 'solid',
                 borderColor: 'blue'}} className='button'>
-        <p style={{color: category === item.id?'blue': item.textColor,
+        <p style={{color: category === item.name?'blue': item.textColor,
          margin:20, fontSize:15}}>{item.name}</p>
         </button>
         </div>
